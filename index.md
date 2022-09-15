@@ -1,1 +1,2 @@
-Test FOR pages
+#build setting
+theme:=minima
