@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<!--
+	Read Only by HTML5 UP| @Xinyi Xie
+	Created by 2022/03/23
+-->
+<html>
+	<head>
+		<title>Authenticated Phone Key Vulnerability in Tesla Model 3</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<section id="header">
+				<header>
+					<span class="image avatar"><img src="images/avatar.jpg" alt="" /></span>
+					<h1 id="logo">Security Lab</h1>
+					<p><a href = "https://www.fm-chips.com" >Shanghai Fudan Microelectronics Group Company Limited</a><br />
+					Kun Jiang, Xinyi Xie, Rui Dai</p>
+				</header>
+				<nav id="nav">
+					<ul>
+						<li><a href="#one" class="active">Introduction</a></li>
+						<li><a href="#two">How does it work</a></li>
+						<li><a href="#three">Impact</a></li>
+						<li><a href="#four">Try it yourself</a></li>
+						<li><a href="#five">Possible countermeasures</a></li>
+					</ul>
+				</nav>
+				<footer>
+					<ul class="icons">
+							<li><a href="mailto:xiexinyi@fmsh.com.cn"  class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+							<li><a href="https://github.com/fmsh-seclab/TesMla" class="icon brands fa-github"><span class="label">Github</span></a></li>
+							<!--<li><a href="https://www.fm-chips.com/123" class="icon solid fa-address-card"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://www.fm-chips.com" class="icon solid fa-address-card"><span class="label">Address</span></a> -->
+						
+					</ul>
+				</footer>
+			</section>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+						<section id="one">
+							<div class="image main" data-position="center">
+								<img src="images/tesla_m3.jpg" alt="" />
+							</div>
+							<div class="container">
+								<header class="major">
+									<h2>Is Phone Key Secure?</h2>
+									<p> Compromising Keyless Entry for Tesla Model 3</p>
+
+								</header>
+								<p>
+									<b> Exploit: </b> Authentication Bypass by Spoofing <br/>
+									<b> Data: </b> 2022-03-06 <br/>
+									<b> Exploit Authore: </b> Kun Jiang, Xinyi Xie, Rui Dai, Jun Lu <br/>
+									<b> Affected Product: </b> Tesla Mode 3 <br/>
+									<b> Version: </b> Tesla Model 3: V11, Tesla Mobile App: V4.23 (test on Motorola Edge S Android 11) <br/>
+		
+									<b> CVE: </b> CVE-2022-37709 <br/>
+								</p>
+
+								<p>
+									The Tesla app has a feature called Phone Key that turns a smartphone into a key. Locking and unlocking even starting Model 3 with your phone key is conveniently hands-free.  
+									As you approach, your phone's Bluetooth signal is detected and doors unlock. Further, you can start and drive the car without ever taking the phone out of a pocket.</br>
+									However, this passive entry and start feature are not secure enough. The authentication can be bypassed by spoofing. 
+									It allows attackers to open a door and drive the car away by leveraging access to a legitimate Phone Key.
+								</p>
+
+								<!--<blockquote><b>NOTE:</b> All analysis below is legal allowed by the vehicle owner. And we have reported the vulnerability to Tesla and are waiting for the responses.</blockquote>-->
+							</div>
+						</section>
+
+						
+
+						<!-- Two -->
+					
+						<section id="two">
+							<div class="container">
+								<h3>How does it work?</h3>
+								<p>The phone key communicates with Model 3 using Bluetooth in plain. The Bluetooth Phone Key reconnects to the Model 3 depending on
+									 the vehicle's MAC address only. Since the MAC address of the car is static, an adversary can fake the Model 3 easily. 
+									 In this case, the adversary forwards the messages to both sides as an intermediary. </br>
+									Model 3 authenticates the key by two attestations, the result of AES-GCM. The Phone generates the second attestation based on a token 
+									from the vehicle. According to our experiments, the update of the token is not related to the connection status and happens over hours. 
+									It allows the adversary to complete the attack with one attack device. The adversary needs to approach the owner and the Model 3 in 
+									turn to forward messages. By spoofing the Phone key and the vehicle, the attack device can bypass the authentication. Finally, the Model
+									 3 unlocks the door and can be started.</p>
+								
+								<section>
+									<h4>More Technical Description</h4>
+									<p>Here is a more detailed explanation of the exploit:</p>
+									
+									<div class="col col-12-xsmall">
+										<ol>
+											<li>Get the MAC address <b>BD_ADDR</b> of the Model 3 according to advertisements broadcasting.</li>
+											<li>Change the MAC address of the attack device same as Model 3 </li>
+											<li>Approach the owner to get the first attestation <b>A</b>. 
+											<li>Approach Model 3 to get the token <b>G</b> </li>
+											<li>Approach the owner to get two attestations <b>A', B</b></li>
+											<li>Back to the vehcile. The vehicle unlocks.</li>
+										</ol>
+									</div>
+									
+									 Figure below shows the entire process of expoiting the vulnerabilities.</p>
+									<div class="image attack" data-position="center">
+										<img src="images/attack.jpg" alt="" />
+									</div>
+								<hr/>
+									<ul class="actions special">
+										<li><a href="#" class="button">More Details</a></li>
+									</ul>
+								</section>
+							</div>
+						</section>
+
+						
+
+						<!-- Three -->
+					
+						<section id="three">
+							<div class="container">
+								<h3>Impact</h3>
+								<blockquote>
+									<ol>
+										<li>The owner will not realize that an adversary has stolen some information throughout the attack.</li>
+										<li>Because the token G remains fixed for several hours, the attacker has plenty of time to complete the Man in the Middle Attack. The parking lot near Starbucks or supermarkets appears to be a great place to perform the attack.</li>
+										<li>Since most of the communication data on the Bluetooth channel is in plaintext, it is easy for an attacker to replay some fixed data, such as request commands and vehicle status information.</li>
+									</ol>
+								</blockquote>
+							</div>
+							
+						</section>
+
+						<!--Four -->
+						<section id="four">
+							<div class="container">
+								<header class="major">
+									<h3>Try it yourself</h23>
+								</header>
+								<p> Any devices thet support BLE 5 can exploit this vulnerability. We used a Google pixel 5A phone as the attack device. 
+									After changing Android source codes, the device turned off BLE MAC address rotation while in advertising mode. 
+									To complete the attack, we created a new App mainly based on <a href="https://developer.android.google.cn/reference/android/bluetooth/BluetoothGatt">
+										<code>android.bluetooth.BluetoothGatt</code></a> and <a href="https://developer.android.google.cn/reference/android/bluetooth/BluetoothGattServer">
+											<code>android.bluetooth.BluetoothGattServer</code></a>.
+										The app supports spoofing as the Phone Key and the Model 3. <br>
+										Follow the instructions <a href="https://github.com/fmsh-seclab/TesMla">here</a>.
+									 </p>
+
+								<!-- Source code by <a href="www.github.com">HTML5 UP</a>.</p> -->
+							</div>
+						</section>
+			
+
+						<!-- Five -->
+						<section id="five">
+							<div class="container">
+								<h3>Possible countermeasures</h3>
+								<ul class="feature-icons">
+									<li class="icon solid fa-bolt">
+										<h5>Turn on PIN 2 Drive</h5>
+										<p> Car owners can enable this multi-factor authentication countermeasure. It allows owners to program a personal
+											identification number. This feature forces the owner to enter these numbers into the screen to drive the car.  
+										 </p>
+									</li>
+									<li class="icon solid fa-book">
+										<h5>BLE encryption</h5>
+										<p> Tesla can enable secure BLE communication.
+											The communication between end devices will be protected by this session key. Enabling BLE encryption will
+											improve the difficulty of analysis and device spoofing. </p>
+									</li>
+									<li class="icon solid fa-code">
+										<h5>Refresh Token frequently</h5>
+										<p> Tesla can update the token every time the Model 3 establishes a BLE connection. The adversary has to
+											use two attack devices connecting to the Phone Key and Model 3 simultaneously. 
+											To a certain degree, refreshing the token fast enough will reduce the attack window.</p>
+									</li>
+									<li class="icon solid fa-cubes">
+										<h5>ToF-based secure ranging</h5>
+										<p>The UWB utilizes the ToF technique to measure the distance. Messages of measurement or
+											synchronization require encryption or signature by a trusted module,
+											Secure Element (SE) for example.</p>
+									</li>
+								</ul>
+							</div>
+
+						</section>
+
+					</div>
+				<!-- Footer -->
+					<section id="footer">
+						<div class="container">
+							<ul class="copyright">
+								<li>&copy; All rights reserved.</li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
