@@ -86,9 +86,10 @@
 							<div class="container">
 								<h3>How does it work?</h3>
 								<p>The phone key communicates with Model 3 using Bluetooth in plain. The Bluetooth Phone Key reconnects to the Model 3 depending on
-									 the vehicle's MAC address only. Since the MAC address of the car is static, an adversary can fake the Model 3 easily. 
+									 the vehicle's MAC address only. Since the MAC address of the car is static, an adversary can fake the Model 3 easily. The Phone
+									 Key will reconnect to the device with the specific MAC automatically. 
 									 In this case, the adversary forwards the messages to both sides as an intermediary. </br>
-									Model 3 authenticates the key by two attestations, the result of AES-GCM. The Phone generates the second attestation based on a token 
+									Model 3 authenticates the key by two attestations. The Phone generates the second attestation based on a token 
 									from the vehicle. According to our experiments, the update of the token is not related to the connection status and happens over hours. 
 									It allows the adversary to complete the attack with one attack device. The adversary needs to approach the owner and the Model 3 in 
 									turn to forward messages. By spoofing the Phone key and the vehicle, the attack device can bypass the authentication. Finally, the Model
@@ -96,7 +97,9 @@
 								
 								<section>
 									<h4>More Technical Description</h4>
-									<p>Here is a more detailed explanation of the exploit:</p>
+									<p>Here is a more detailed explanation of the exploit:</br>
+									   The Phone Key and Model 3 will generate a shared secret by <code>ECDH</code>. The shared key is used to authenticate attestations.
+									   The attestations are calculated by <code>AES-GCM</code>.</p>
 									
 									<div class="col col-12-xsmall">
 										<ol>
@@ -130,7 +133,7 @@
 								<h3>Impact</h3>
 								<blockquote>
 									<ol>
-										<li>The owner will not realize that an adversary has stolen some information throughout the attack.</li>
+										<li>The whole process is out of the awareness of the car owner. People can drive your car without your permission.</li>
 										<li>Because the token G remains fixed for several hours, the attacker has plenty of time to complete the Man in the Middle Attack. The parking lot near Starbucks or supermarkets appears to be a great place to perform the attack.</li>
 										<li>Since most of the communication data on the Bluetooth channel is in plaintext, it is easy for an attacker to replay some fixed data, such as request commands and vehicle status information.</li>
 									</ol>
@@ -145,13 +148,10 @@
 								<header class="major">
 									<h3>Try it yourself</h23>
 								</header>
-								<p> Any devices thet support BLE 5 can exploit this vulnerability. We used a Google pixel 5A phone as the attack device. 
+								<p> Any devices that support BLE 5 can exploit this vulnerability. We used a Google pixel 5A phone as the attack device. 
 									After changing Android source codes, the device turned off BLE MAC address rotation while in advertising mode. 
-									To complete the attack, we created a new App mainly based on <a href="https://developer.android.google.cn/reference/android/bluetooth/BluetoothGatt">
-										<code>android.bluetooth.BluetoothGatt</code></a> and <a href="https://developer.android.google.cn/reference/android/bluetooth/BluetoothGattServer">
-											<code>android.bluetooth.BluetoothGattServer</code></a>.
-										The app supports spoofing as the Phone Key and the Model 3. <br>
-										The more info for this app is on <a href="https://github.com/fmsh-seclab/TesMla">Github</a>.
+									To complete the attack, we created a new App, which supports spoofing as the Phone Key and the Model 3. <br>
+										More information is on the <a href="https://github.com/fmsh-seclab/TesMla">Github</a>.
 									 </p>
 
 								<!-- Source code by <a href="www.github.com">HTML5 UP</a>.</p> -->
