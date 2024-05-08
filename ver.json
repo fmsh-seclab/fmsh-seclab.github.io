@@ -1,18 +1,18 @@
 {
   "status":200,
-  "7020_series":{
+  "7020":{
+    "bsp": "v1.0",
+    "procise": "v1.0",
+    "doc": "v1.0"
+  },
+  "70100":{
     "bsp": "v1.0",
     "procise": "v1.0",
     "文档说明": "v1.0"
   },
-  "70100_series":{
-    "bsp": "v1.0",
-    "procise": "v1.0",
-    "文档说明": "v1.0"
-  },
-  "secure_boot_lib":{
+  "lib":{
     "src": "v1.0",
-    "lib": "v1.0"
+    "afile": "v1.0"
   },
   "data": 8
 }
