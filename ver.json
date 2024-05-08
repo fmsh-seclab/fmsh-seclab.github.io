@@ -12,6 +12,6 @@
   "secure_boot_lib":{
     "src": "v1.0",
     "lib": "v1.0"
-  }
+  },
   "data": 8
 }
